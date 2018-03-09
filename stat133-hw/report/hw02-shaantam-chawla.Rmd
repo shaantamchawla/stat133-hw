@@ -1,0 +1,82 @@
+---
+title: "HW02 - Shot Charts"
+author: "Shaantam Chawla"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.path = '../images/')
+```
+
+## R Markdown
+
+```{r}
+## 5.1
+
+all <- read_csv('/stat133/stat133-hw/data/shots-data.csv')
+
+all %>%
+  group_by(name) %>% 
+  summarise(total = n()) %>% 
+  select(name) %>% 
+  arrange(desc(total))
+
+## 5.2
+
+all %>% 
+  group_by(name) %>% 
+  select(name, shot_made_flag) %>% 
+  summarise(total = n(), made = sum(shot_made_flag == 'made shot')) %>% 
+  mutate(perc_made = made * 100 / total) %>% 
+  arrange(desc(perc_made))
+
+## 5.3
+
+all %>% 
+  filter(shot_type=='2PT Field Goal') %>%
+  group_by(name) %>% 
+  select(name, shot_made_flag) %>% 
+  summarise(total = n(), made = sum(shot_made_flag == 'made shot')) %>% 
+  mutate(perc_made = made * 100 / total) %>% 
+  arrange(desc(perc_made))
+
+## 5.4
+
+all %>% 
+  filter(shot_type=='3PT Field Goal') %>%
+  group_by(name) %>% 
+  select(name, shot_made_flag) %>% 
+  summarise(total = n(), made = sum(shot_made_flag == 'made shot')) %>% 
+  mutate(perc_made = made * 100 / total) %>% 
+  arrange(desc(perc_made))
+
+## 6.1
+
+distance_proportion <- all %>% 
+  group_by(shot_distance) %>% 
+  select(shot_distance, shot_made_flag) %>% 
+  summarise(total_shots = n(), made_shots = sum(shot_made_flag == 'made shot')) %>%
+  mutate(made_shot_prop = made_shots / total_shots) %>% 
+  select(shot_distance, made_shot_prop)
+
+distance_proportion
+
+## 6.2
+
+ggplot(data = distance_proportion, 
+      aes(x = shot_distance, y = made_shot_prop)) + 
+      geom_point() + 
+  xlab('distance from basket') + 
+  ylab('percent made')
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
