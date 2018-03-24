@@ -1,0 +1,72 @@
+# Note - I am a Windows user, so I left my Bash commands as unevaluated code chunks, as per Professor Sanchez's instructions.
+
+# 2.1
+
+```
+cut -f 2 -d "," nba2017-roster.csv|tail +2|sort -u>team-names.txt
+head -n 5 team-names.txt
+```
+
+# 2.2
+
+```
+cut -f 3 -d "," nba2017-roster.csv|tail +2|sort -u>position-names.txt
+head -n 5 position-names.txt
+```
+
+# 2.3
+
+cut -f 7 -d "," nba2017-roster.csv|tail +2|sort -n|uniq -c|sort -n -r>experience-counts.txt
+head -n 10 experience-counts.txt
+
+# 2.4
+
+head -n 1 nba2017-roster.csv > LAC.csv
+grep "LAC" nba2017-roster.csv >> LAC.csv
+cat LAC.csv
+
+# 2.5
+
+grep "LAL" nba2017-roster.csv|cut -f 6 -d ","|sort|uniq -c
+
+# 2.6
+
+grep "CLE" nba2017-roster.csv|wc -l
+
+# 2.7
+
+cut -f 1,4-5 -d "," nba2017-roster.csv|head -n 1 > gsw-height-weight.csv
+grep "GSW" nba2017-roster.csv|cut -f 1,4-5 -d "," >> gsw-height-weight.csv
+cat gsw-height-weight.csv
+
+# 2.8
+
+cut -f 1,9 -d "," nba2017-roster.csv|head -n 1 > top10-salaries.csv
+cut -f 1,9 -d "," nba2017-roster.csv|tail +2|sort -t "," -k 2 -n -r|head >> top10-salaries.csv
+cat top10-salaries.csv
+
+# Question 4
+
+```{r}
+source('code/binomial-functions.R')
+
+bin_probability(trials = 10, success = 3, prob = 1/6)
+
+loaded_die <- bin_distribution(trials = 10, prob = 0.25)
+loaded_die
+
+barplot(loaded_die$probability, names.arg = loaded_die$success)
+
+total <- 0
+for (i in c(4, 5)) {
+  total <- total + bin_probability(trials = 10, success = i, prob = 0.35)
+}
+
+total
+
+loaded_die2 <- bin_distribution(trials = 15, prob = 0.35)
+loaded_die2
+
+barplot(loaded_die2$probability, names.arg = loaded_die2$success)
+
+```
